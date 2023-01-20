@@ -1,5 +1,4 @@
 name: Automated builds
-
 on: [push]
 
 defaults:
