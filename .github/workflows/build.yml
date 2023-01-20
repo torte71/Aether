@@ -258,8 +258,70 @@ jobs:
         (cd aether-linux-amd64-GNU; zip -r ../aether-${{ github.ref_name }}-linux-amd64.zip aether.lv2)
         (cd aether-linux-i686;      zip -r ../aether-${{ github.ref_name }}-linux-i686.zip aether.lv2)
         (cd aether-windows;         zip -r ../aether-${{ github.ref_name }}-windows-amd64.zip aether.lv2)
+        find -name *.zip
 
-    - uses: softprops/action-gh-release@v1
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        files: |
-          *.zip
+          tag_name: Latest
+          release_name: Release latest
+          draft: false
+          prerelease: true
+
+    - name: Upload Source code
+      id: upload-release-asset-src
+      uses: actions/upload-release-asset@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: aether-${{ github.ref_name }}-source-code.zip
+          asset_name: aether-${{ github.ref_name }}-source-code.zip
+          asset_content_type: application
+
+    - name: Upload macOS-amd64 package
+      id: upload-release-asset-macos-amd64
+      uses: actions/upload-release-asset@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: aether-${{ github.ref_name }}-macos-amd64.zip
+          asset_name: aether-${{ github.ref_name }}-macos-amd64.zip
+          asset_content_type: application
+
+    - name: Upload Linux-amd64 package
+      id: upload-release-asset-linux-amd64
+      uses: actions/upload-release-asset@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: aether-${{ github.ref_name }}-linux-amd64.zip
+          asset_name: aether-${{ github.ref_name }}-linux-amd64.zip
+          asset_content_type: application
+
+    - name: Upload Linux-i686 package
+      id: upload-release-asset-linux-i686
+      uses: actions/upload-release-asset@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: aether-${{ github.ref_name }}-linux-i686.zip
+          asset_name: aether-${{ github.ref_name }}-linux-i686.zip
+          asset_content_type: application
+
+    - name: Upload Windows-amd64package
+      id: upload-release-asset-windows-amd64
+      uses: actions/upload-release-asset@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: aether-${{ github.ref_name }}-windows-amd64.zip
+          asset_name: aether-${{ github.ref_name }}-windows-amd64.zip
+          asset_content_type: application
