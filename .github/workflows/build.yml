@@ -235,9 +235,8 @@ jobs:
           sord_validate $(find lv2 -name "*.ttl") $(find $0 -name "*.ttl") \
         ' {} \;
 
-  xrelease:
+  release:
     runs-on: ubuntu-20.04
-    if: ${{ github.ref_type == 'tag'}}
 
     needs:
       - create-source-archive
