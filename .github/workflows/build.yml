@@ -237,6 +237,7 @@ jobs:
 
   release:
     runs-on: ubuntu-20.04
+    if: ${{ github.ref_type == 'tag'}}
 
     needs:
       - create-source-archive
@@ -252,11 +253,11 @@ jobs:
     - name: Create Archives
       run: |
         find
-        (cd aether-source-code;     zip -r ../aether-${{ github.ref_name }}-source-code.zip . -i aether.lv2)
-        (cd aether-macos;           zip -r ../aether-${{ github.ref_name }}-macos-amd64.zip . -i aether.lv2)
-        (cd aether-linux-amd64-GNU; zip -r ../aether-${{ github.ref_name }}-linux-amd64.zip . -i aether.lv2)
-        (cd aether-linux-i686;      zip -r ../aether-${{ github.ref_name }}-linux-i686.zip . -i aether.lv2)
-        (cd aether-windows;         zip -r ../aether-${{ github.ref_name }}-windows-amd64.zip . -i aether.lv2)
+        (cd aether-source-code;     zip -r ../aether-${{ github.ref_name }}-source-code.zip src)
+        (cd aether-macos;           zip -r ../aether-${{ github.ref_name }}-macos-amd64.zip aether.lv2)
+        (cd aether-linux-amd64-GNU; zip -r ../aether-${{ github.ref_name }}-linux-amd64.zip aether.lv2)
+        (cd aether-linux-i686;      zip -r ../aether-${{ github.ref_name }}-linux-i686.zip aether.lv2)
+        (cd aether-windows;         zip -r ../aether-${{ github.ref_name }}-windows-amd64.zip aether.lv2)
 
     - uses: softprops/action-gh-release@v1
       with:
