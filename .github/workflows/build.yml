@@ -39,6 +39,7 @@ jobs:
       with:
         tag: "Latest"
         message: "Latest git version"
+        force_push_tag: true
         github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - uses: actions/checkout@v3.3.0
