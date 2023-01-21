@@ -1,11 +1,11 @@
 name: Automated builds
 
-#on: [push]
-on:
-  push:
-    tags:
-      - 'v*'
-  #if: ${{ github.ref_type == 'tag'}}
+on: [push]
+#on:
+#  push:
+#    tags:
+#      - 'v*'
+#  #if: ${{ github.ref_type == 'tag'}}
 
 defaults:
   run:
@@ -22,6 +22,14 @@ jobs:
         artifact-name: ${{ env.ARCHIVE_NAME }}
 
     steps:
+    - name: Move tag 'Latest'
+      uses: weareyipyip/walking-tag-action@v1
+      with:
+        tag-name: Latest
+        #tag-message: The current production release is based on this commit
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - uses: actions/checkout@v2
       with:
         path: aether
@@ -231,6 +239,7 @@ jobs:
         find -name 'aether.lv2' -exec sh -c ' \
           sord_validate $(find lv2 -name "*.ttl") $(find $0 -name "*.ttl") \
         ' {} \;
+
   release:
     runs-on: ubuntu-20.04
     #if: ${{ github.ref_type == 'tag'}}
@@ -260,6 +269,7 @@ jobs:
     - uses: softprops/action-gh-release@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+        tag_name: Latest
         prerelease: true
         files: |
           *.zip
