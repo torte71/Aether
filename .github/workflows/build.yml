@@ -22,23 +22,29 @@ jobs:
         artifact-name: ${{ env.ARCHIVE_NAME }}
 
     steps:
-    - name: Move tag 'Latest'
-      uses: weareyipyip/walking-tag-action@v1
-      with:
-        tag-name: Latest
-        tag-message: Latest git version
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - uses: actions/checkout@v2
+      #    - name: Move tag 'Latest'
+      #      uses: weareyipyip/walking-tag-action@v1
+      #      with:
+      #        tag-name: Latest
+      #        tag-message: Latest git version
+      #      env:
+      #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v3.3
       with:
         path: aether
         submodules: recursive
 
+    - name: Move tag 'Latest'
+      uses: rickstaa/action-create-tag@v1.5.4
+      with:
+        tag: "Latest"
+        message: "Latest git version"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Set Archive Name
       run: echo "ARCHIVE_NAME=aether-source-code" >> "$GITHUB_ENV"
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3.1.2
       with:
         name: ${{ env.ARCHIVE_NAME }}
         path: aether/
