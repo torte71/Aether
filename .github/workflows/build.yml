@@ -31,7 +31,7 @@ jobs:
       #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/checkout@v3.3.0
       with:
-        path: aether
+        path: .
         submodules: recursive
 
     - name: Move tag 'Latest'
@@ -41,6 +41,11 @@ jobs:
         tag: "Latest"
         message: "Latest git version"
         github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - uses: actions/checkout@v3.3.0
+      with:
+        path: aether
+        submodules: recursive
 
     - name: Set Archive Name
       run: echo "ARCHIVE_NAME=aether-source-code" >> "$GITHUB_ENV"
