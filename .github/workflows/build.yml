@@ -22,6 +22,19 @@ jobs:
         artifact-name: ${{ env.ARCHIVE_NAME }}
 
     steps:
+    - name: Remove tag 'Latest'
+      uses: dev-drprasad/delete-tag-and-release@master
+      with:
+        delete_release: false
+        tag_name: Latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Add tag 'Latest'
+      uses: tvdias/github-tagger@v0.0.1
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        tag: "Latest"
+
       #    - name: Move tag 'Latest'
       #      uses: weareyipyip/walking-tag-action@v1
       #      with:
@@ -29,18 +42,18 @@ jobs:
       #        tag-message: Latest git version
       #      env:
       #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - uses: actions/checkout@v3.3.0
-      with:
-        path: .
-        submodules: recursive
+      #- uses: actions/checkout@v3.3.0
+      #  with:
+      #    path: .
+      #    submodules: recursive
 
-    - name: Move tag 'Latest'
-      uses: rickstaa/action-create-tag@v1.5.4
-      with:
-        tag: "Latest"
-        message: "Latest git version"
-        force_push_tag: true
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+      #- name: Move tag 'Latest'
+      #  uses: rickstaa/action-create-tag@v1.5.4
+      #  with:
+      #    tag: "Latest"
+      #    message: "Latest git version"
+      #    force_push_tag: true
+      #    github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - uses: actions/checkout@v3.3.0
       with:
@@ -270,6 +283,7 @@ jobs:
     - name: Create Archives
       run: |
         VER=${{ github.ref_name }}
+        if [[ $VER == onpush ]]; then VER="Latest" ; fi
         if [[ $VER =~ ^v ]]; then VER=${VER:1} ; fi
         export VER
         (cd aether-source-code;     zip -r ../aether-$VER-source-code.zip src)
