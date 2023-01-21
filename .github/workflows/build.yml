@@ -248,11 +248,15 @@ jobs:
 
     - name: Create Archives
       run: |
-        (cd aether-source-code;     zip -r ../aether-${{ github.ref_name }}-source-code.zip src)
-        (cd aether-macos;           zip -r ../aether-${{ github.ref_name }}-macos-amd64.zip aether.lv2)
-        (cd aether-linux-amd64-GNU; zip -r ../aether-${{ github.ref_name }}-linux-amd64.zip aether.lv2)
-        (cd aether-linux-i686;      zip -r ../aether-${{ github.ref_name }}-linux-i686.zip aether.lv2)
-        (cd aether-windows;         zip -r ../aether-${{ github.ref_name }}-windows-amd64.zip aether.lv2)
+        VER=${{ github.ref_name }}
+        if [[ $VER =~ ^v ]]; then VER=${VER:1} ; fi
+        export VER
+        (cd aether-source-code;     zip -r ../aether-$VER-source-code.zip src)
+        (cd aether-macos;           zip -r ../aether-$VER-macos-amd64.zip aether.lv2)
+        (cd aether-linux-amd64-GNU; zip -r ../aether-$VER-linux-amd64.zip aether.lv2)
+        (cd aether-linux-i686;      zip -r ../aether-$VER-linux-i686.zip aether.lv2)
+        (cd aether-windows;         zip -r ../aether-$VER-windows-amd64.zip aether.lv2)
+
     - uses: softprops/action-gh-release@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
