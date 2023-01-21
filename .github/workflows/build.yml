@@ -35,7 +35,6 @@ jobs:
         submodules: recursive
 
     - name: Move tag 'Latest'
-      working-directory: aether
       uses: rickstaa/action-create-tag@v1.5.4
       with:
         tag: "Latest"
