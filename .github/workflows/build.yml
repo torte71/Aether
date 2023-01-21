@@ -26,7 +26,7 @@ jobs:
       uses: weareyipyip/walking-tag-action@v1
       with:
         tag-name: Latest
-        #tag-message: The current production release is based on this commit
+        tag-message: Latest git version
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
