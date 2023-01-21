@@ -250,6 +250,6 @@ jobs:
         (cd aether-windows;         zip -r ../aether-${{ github.ref_name }}-windows-amd64.zip aether.lv2)
     - uses: softprops/action-gh-release@v1
       with:
-        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         files: |
           *.zip
