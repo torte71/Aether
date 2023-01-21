@@ -23,7 +23,7 @@ jobs:
 
     steps:
     - name: Remove tag 'Latest'
-      uses: dev-drprasad/delete-tag-and-release@master
+      uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
         delete_release: false
         tag_name: Latest
@@ -283,8 +283,11 @@ jobs:
     - name: Create Archives
       run: |
         VER=${{ github.ref_name }}
-        if [[ $VER == onpush ]]; then VER="Latest" ; fi
-        if [[ $VER =~ ^v ]]; then VER=${VER:1} ; fi
+        # normal push: version = "latest"
+        # push tag: remove leading 'v' from tag (v1.0 -> 1.0)
+        if [[ $VER == onpush ]]; then VER="latest"
+        elif [[ $VER =~ ^v ]]; then VER=${VER:1}
+        fi
         export VER
         (cd aether-source-code;     zip -r ../aether-$VER-source-code.zip src)
         (cd aether-macos;           zip -r ../aether-$VER-macos-amd64.zip aether.lv2)
