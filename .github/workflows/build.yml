@@ -228,7 +228,7 @@ jobs:
         ' {} \;
   release:
     runs-on: ubuntu-20.04
-    #if: ${{ github.ref_type == 'tag'}}
+    if: ${{ github.ref_type == 'tag'}}
 
     needs:
       - create-source-archive
