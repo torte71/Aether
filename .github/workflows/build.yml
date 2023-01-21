@@ -29,7 +29,7 @@ jobs:
       #        tag-message: Latest git version
       #      env:
       #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - uses: actions/checkout@v3.3
+    - uses: actions/checkout@v3.3.0
       with:
         path: aether
         submodules: recursive
