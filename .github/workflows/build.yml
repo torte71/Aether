@@ -1,6 +1,11 @@
 name: Automated builds
 
-on: [push]
+#on: [push]
+on:
+  push:
+    tags:
+      - 'v*'
+  #if: ${{ github.ref_type == 'tag'}}
 
 defaults:
   run:
@@ -228,7 +233,7 @@ jobs:
         ' {} \;
   release:
     runs-on: ubuntu-20.04
-    if: ${{ github.ref_type == 'tag'}}
+    #if: ${{ github.ref_type == 'tag'}}
 
     needs:
       - create-source-archive
