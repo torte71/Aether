@@ -1,4 +1,5 @@
 name: Automated builds
+
 on: [push]
 
 defaults:
@@ -53,7 +54,6 @@ jobs:
       run: |
         cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TESTS="on"
         cmake --build . --config $BUILD_TYPE -j3
-
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: ctest -C $BUILD_TYPE
@@ -62,7 +62,6 @@ jobs:
       run: |
         cmake -E make_directory artifact
         cmake -E rename build/aether.lv2 artifact/aether.lv2
-
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ env.ARCHIVE_NAME }}
@@ -105,7 +104,6 @@ jobs:
       run: |
         cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TESTS="on"
         cmake --build . --config $BUILD_TYPE -j2
-
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: ctest -C $BUILD_TYPE
@@ -114,7 +112,6 @@ jobs:
       run: |
         cmake -E make_directory artifact
         cmake -E rename build/aether.lv2 artifact/aether.lv2
-
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ env.ARCHIVE_NAME }}
@@ -156,7 +153,6 @@ jobs:
       run: |
         cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TESTS="on"
         cmake --build . --config $BUILD_TYPE -j2
-
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: ctest -C $BUILD_TYPE
@@ -165,7 +161,6 @@ jobs:
       run: |
         cmake -E make_directory artifact
         cmake -E rename build/aether.lv2 artifact/aether.lv2
-
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ env.ARCHIVE_NAME }}
@@ -192,12 +187,10 @@ jobs:
         cd build
         cmake -G "Visual Studio 16 2019" ..
         cmake --build . --config=release -j2
-
     - name: Prepare Artifact for Upload
       run: |
         cmake -E make_directory artifact
         cmake -E rename build/aether.lv2 artifact/aether.lv2
-
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ env.ARCHIVE_NAME }}
@@ -233,7 +226,6 @@ jobs:
         find -name 'aether.lv2' -exec sh -c ' \
           sord_validate $(find lv2 -name "*.ttl") $(find $0 -name "*.ttl") \
         ' {} \;
-
   release:
     runs-on: ubuntu-20.04
     #if: ${{ github.ref_type == 'tag'}}
@@ -256,70 +248,8 @@ jobs:
         (cd aether-linux-amd64-GNU; zip -r ../aether-${{ github.ref_name }}-linux-amd64.zip aether.lv2)
         (cd aether-linux-i686;      zip -r ../aether-${{ github.ref_name }}-linux-i686.zip aether.lv2)
         (cd aether-windows;         zip -r ../aether-${{ github.ref_name }}-windows-amd64.zip aether.lv2)
-        find
-
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@master
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: softprops/action-gh-release@v1
       with:
-          tag_name: Latest
-          release_name: Release latest
-          draft: false
-          prerelease: true
-
-    - name: Upload Source code
-      id: upload-release-asset-src
-      uses: actions/upload-release-asset@master
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: aether-${{ github.ref_name }}-source-code.zip
-          asset_name: aether-${{ github.ref_name }}-source-code.zip
-          asset_content_type: application
-
-    - name: Upload macOS-amd64 package
-      id: upload-release-asset-macos-amd64
-      uses: actions/upload-release-asset@master
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: aether-${{ github.ref_name }}-macos-amd64.zip
-          asset_name: aether-${{ github.ref_name }}-macos-amd64.zip
-          asset_content_type: application
-
-    - name: Upload Linux-amd64 package
-      id: upload-release-asset-linux-amd64
-      uses: actions/upload-release-asset@master
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: aether-${{ github.ref_name }}-linux-amd64.zip
-          asset_name: aether-${{ github.ref_name }}-linux-amd64.zip
-          asset_content_type: application
-
-    - name: Upload Linux-i686 package
-      id: upload-release-asset-linux-i686
-      uses: actions/upload-release-asset@master
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: aether-${{ github.ref_name }}-linux-i686.zip
-          asset_name: aether-${{ github.ref_name }}-linux-i686.zip
-          asset_content_type: application
-
-    - name: Upload Windows-amd64package
-      id: upload-release-asset-windows-amd64
-      uses: actions/upload-release-asset@master
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: aether-${{ github.ref_name }}-windows-amd64.zip
-          asset_name: aether-${{ github.ref_name }}-windows-amd64.zip
-          asset_content_type: application
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        files: |
+          *.zip
