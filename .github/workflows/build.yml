@@ -35,9 +35,10 @@ jobs:
         submodules: recursive
 
     - name: Move tag 'Latest'
+      run: cd aether/
       uses: rickstaa/action-create-tag@v1.5.4
       #working-directory: ${{github.workspace}}/aether/
-      working-directory: aether/
+      #working-directory: aether/
       with:
         tag: "Latest"
         message: "Latest git version"
